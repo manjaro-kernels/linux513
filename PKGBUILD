@@ -15,10 +15,10 @@ _kernelname=-MANJARO
 _basekernel=5.13
 _basever=513
 _rc=rc0
-_commit=152d32aa846835987966fd20ee1143b0e05036a0
+_commit=7af81cd0c4306482b49a3adce0fb2f8655f57d0f
 _shortcommit=.${_rc}.d0501.g${_commit:0:7}
 _pkgver=${_basekernel}${_shortcommit}
-pkgver=5.13.rc0.d0501.g152d32a
+pkgver=5.13.rc0.d0501.g7af81cd
 pkgrel=1
 arch=('x86_64')
 url="http://www.kernel.org/"
@@ -71,7 +71,7 @@ source=(#"https://www.kernel.org/pub/linux/kernel/v5.x/linux-${_basekernel}.tar.
         '0512-bootsplash.patch'
         '0513-bootsplash.gitpatch'
         )
-sha256sums=('777e3c4b852835837968d5d39b9c886245c2698a4eb27cacbbe96a9efd1b588d'
+sha256sums=('4d00b787e7784e7a79c31c49deccdf1a1222fbae54fd2fd8a787fff3b83976f7'
             '18cdc7c68fb4242271f7771bb0835b3c69a9ad02b8881fb386c169167ca85e31'
             'fc896e5b00fad732d937bfb7b0db41922ecdb3a488bc1c1b91b201e028eed866'
             '986f8d802f37b72a54256f0ab84da83cb229388d58c0b6750f7c770818a18421'
@@ -275,4 +275,3 @@ package_linux513-headers() {
     /usr/bin/strip ${_strip} "${_binary}"
   done < <(find "${_builddir}/scripts" -type f -perm -u+w -print0 2>/dev/null)
 }
-
