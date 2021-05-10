@@ -14,11 +14,11 @@ pkgname=('linux513' 'linux513-headers')
 _kernelname=-MANJARO
 _basekernel=5.13
 _basever=513
-_rc=rc0
-_commit=b741596468b010af2846b75f5e75a842ce344a6e
-_shortcommit=.${_rc}.d0508.g${_commit:0:7}
+_rc=rc1
+_commit=6efb943b8616ec53a5e444193dccf1af9ad627b5
+_shortcommit=.${_rc}.d0509.g${_commit:0:7}
 _pkgver=${_basekernel}${_shortcommit}
-pkgver=5.13.rc0.d0508.gb741596
+pkgver=5.13.rc1.d0509.g6efb943
 pkgrel=1
 arch=('x86_64')
 url="http://www.kernel.org/"
@@ -47,7 +47,7 @@ source=(#"https://www.kernel.org/pub/linux/kernel/v5.x/linux-${_basekernel}.tar.
         # MANJARO Patches
         '0101-i2c-nuvoton-nc677x-hwmon-driver.patch'
         '0102-iomap-iomap_bmap-should-accept-unwritten-maps.patch'
-        '0103-futex.patch'
+#        '0103-futex.patch'
         '0104-revert-xhci-Add-support-for-Renesas-controller-with-memory.patch'
         '0107-quirk-kernel-org-bug-210681-firmware_rome_error.patch'
         # Lenovo + AMD
@@ -71,14 +71,13 @@ source=(#"https://www.kernel.org/pub/linux/kernel/v5.x/linux-${_basekernel}.tar.
         '0512-bootsplash.patch'
         '0513-bootsplash.gitpatch'
         )
-sha256sums=('a3be9eba871e643b375515a08f97e4052f5fc1653e48cd495039bf72cac34c74'
+sha256sums=('86415944eed851fa1bf69ccc90fa1a7e857a9afbe4b634654fbd077e842ff297'
             '080750067ed1eee6c31b93e739f57ff1aa26730ba45469c9baf2f9c20544d5fc'
             'fc896e5b00fad732d937bfb7b0db41922ecdb3a488bc1c1b91b201e028eed866'
             '986f8d802f37b72a54256f0ab84da83cb229388d58c0b6750f7c770818a18421'
             'df5843818f1571841e1a8bdbe38d7f853d841f38de46d6a6a5765de089495578'
             '7823d7488f42bc4ed7dfae6d1014dbde679d8b862c9a3697a39ba0dae5918978'
             '95745075edd597caa92b369cfbcd11a04c9e3c88c0c987c70114924e1e01df5c'
-            'b302ba6c5bbe8ed19b20207505d513208fae1e678cf4d8e7ac0b154e5fe3f456'
             '83b5684223309809393bdffc5122924cb9940403d682a887b0aa6524015df973'
             '5e804e1f241ce542f3f0e83d274ede6aa4b0539e510fb9376f8106e8732ce69b'
             '1d58ef2991c625f6f0eb33b4cb8303932f53f1c4694e42bae24c9cd36d2ad013'
