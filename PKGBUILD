@@ -15,11 +15,11 @@ _kernelname=-MANJARO
 _basekernel=5.13
 _basever=513
 _rc=rc1
-_commit=6efb943b8616ec53a5e444193dccf1af9ad627b5
-_shortcommit=.${_rc}.d0509.g${_commit:0:7}
+_commit=25a1298726e97b9d25379986f5d54d9e62ad6e93
+_shortcommit=.${_rc}.d0514.g${_commit:0:7}
 _pkgver=${_basekernel}${_shortcommit}
-pkgver=5.13.rc1.d0509.g6efb943
-pkgrel=1
+pkgver=5.13.rc1.d0514.g25a1298
+pkgrel=2
 arch=('x86_64')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -53,6 +53,7 @@ source=(#"https://www.kernel.org/pub/linux/kernel/v5.x/linux-${_basekernel}.tar.
         # Lenovo + AMD
         '0302-lenovo-wmi2.patch'
         # other patches
+        '0901-Bluetooth-btusb-Fix-failing-to-init-controllers-with-operation-firmware.patch'
         # Bootsplash
         '0401-revert-fbcon-remove-now-unusued-softback_lines-cursor-argument.patch'        
         '0402-revert-fbcon-remove-no-op-fbcon_set_origin.patch'
@@ -71,7 +72,7 @@ source=(#"https://www.kernel.org/pub/linux/kernel/v5.x/linux-${_basekernel}.tar.
         '0512-bootsplash.patch'
         '0513-bootsplash.gitpatch'
         )
-sha256sums=('86415944eed851fa1bf69ccc90fa1a7e857a9afbe4b634654fbd077e842ff297'
+sha256sums=('18cd245277b1e247ac10dc15d296ff3e224bc4e39dbb28485a6764586aca4e26'
             '080750067ed1eee6c31b93e739f57ff1aa26730ba45469c9baf2f9c20544d5fc'
             'fc896e5b00fad732d937bfb7b0db41922ecdb3a488bc1c1b91b201e028eed866'
             '986f8d802f37b72a54256f0ab84da83cb229388d58c0b6750f7c770818a18421'
@@ -81,6 +82,7 @@ sha256sums=('86415944eed851fa1bf69ccc90fa1a7e857a9afbe4b634654fbd077e842ff297'
             '83b5684223309809393bdffc5122924cb9940403d682a887b0aa6524015df973'
             '5e804e1f241ce542f3f0e83d274ede6aa4b0539e510fb9376f8106e8732ce69b'
             '1d58ef2991c625f6f0eb33b4cb8303932f53f1c4694e42bae24c9cd36d2ad013'
+            '7f857cbcabf684a536aa2b9a3c96149309187e67132bb479e409d2bebf09819a'
             '2b11905b63b05b25807dd64757c779da74dd4c37e36d3f7a46485b1ee5a9d326'
             '94a8538251ad148f1025cc3de446ce64f73dc32b01815426fb159c722e8fa5bc'
             '1f18c5c10a3c63e41ecd05ad34cd9f6653ba96e9f1049ce2b7bb6da2578ae710'
