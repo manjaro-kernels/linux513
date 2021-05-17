@@ -73,7 +73,7 @@ source=(#"https://www.kernel.org/pub/linux/kernel/v5.x/linux-${_basekernel}.tar.
         '0513-bootsplash.gitpatch'
         )
 sha256sums=('d91eae8b0085c5a5856ca6e48a89028f7cd08923a80490d43edd5f6b3cb65e54'
-            '080750067ed1eee6c31b93e739f57ff1aa26730ba45469c9baf2f9c20544d5fc'
+            '3445ae672fcfc2b862d2d9c26ddc1351c60a1979e4d14df564717495d36ae270'
             'fc896e5b00fad732d937bfb7b0db41922ecdb3a488bc1c1b91b201e028eed866'
             '986f8d802f37b72a54256f0ab84da83cb229388d58c0b6750f7c770818a18421'
             'df5843818f1571841e1a8bdbe38d7f853d841f38de46d6a6a5765de089495578'
