@@ -14,11 +14,11 @@ pkgname=('linux513' 'linux513-headers')
 _kernelname=-MANJARO
 _basekernel=5.13
 _basever=513
-_rc=rc3
-_commit=6799d4f2da496cab9b3fd26283a8ce3639b1a88d
-_shortcommit=.${_rc}.d0529.g${_commit:0:7}
+_rc=rc4
+_commit=8124c8a6b35386f73523d27eacb71b5364a68c4c
+_shortcommit=.${_rc}.d0530.g${_commit:0:7}
 _pkgver=${_basekernel}${_shortcommit}
-pkgver=5.13.rc3.d0529.g6799d4f
+pkgver=5.13.rc4.d0530.g8124c8a
 pkgrel=1
 arch=('x86_64')
 url="http://www.kernel.org/"
@@ -72,7 +72,7 @@ source=(#"https://www.kernel.org/pub/linux/kernel/v5.x/linux-${_basekernel}.tar.
         '0512-bootsplash.patch'
         '0513-bootsplash.gitpatch'
         )
-sha256sums=('de08c5329d0840e8073372fd3d97fd7f35b78c01c67d92962d170ba1912ec97d'
+sha256sums=('5915011b0014fc8d0256ae494b696aec1a3bf55c9527ba8c192c01f70883a350'
             '18b5dcf97507c285877141b65d87fe097d5a45b5ac08868fefef77bddff27cc1'
             'fc896e5b00fad732d937bfb7b0db41922ecdb3a488bc1c1b91b201e028eed866'
             '986f8d802f37b72a54256f0ab84da83cb229388d58c0b6750f7c770818a18421'
