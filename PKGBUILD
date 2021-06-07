@@ -14,11 +14,11 @@ pkgname=('linux513' 'linux513-headers')
 _kernelname=-MANJARO
 _basekernel=5.13
 _basever=513
-_rc=rc4
-_commit=8124c8a6b35386f73523d27eacb71b5364a68c4c
-_shortcommit=.${_rc}.d0530.g${_commit:0:7}
+_rc=rc5
+_commit=614124bea77e452aa6df7a8714e8bc820b489922
+_shortcommit=.${_rc}.d0606.g${_commit:0:7}
 _pkgver=${_basekernel}${_shortcommit}
-pkgver=5.13.rc4.d0530.g8124c8a
+pkgver=5.13.rc5.d0606.g614124b
 pkgrel=1
 arch=('x86_64')
 url="http://www.kernel.org/"
@@ -53,7 +53,6 @@ source=(#"https://www.kernel.org/pub/linux/kernel/v5.x/linux-${_basekernel}.tar.
         # Lenovo + AMD
         '0302-lenovo-wmi2.patch'
         # other patches
-        '0901-Bluetooth-btusb-Fix-failing-to-init-controllers-with-operation-firmware.patch'
         # Bootsplash
         '0401-revert-fbcon-remove-now-unusued-softback_lines-cursor-argument.patch'        
         '0402-revert-fbcon-remove-no-op-fbcon_set_origin.patch'
@@ -72,8 +71,8 @@ source=(#"https://www.kernel.org/pub/linux/kernel/v5.x/linux-${_basekernel}.tar.
         '0512-bootsplash.patch'
         '0513-bootsplash.gitpatch'
         )
-sha256sums=('5915011b0014fc8d0256ae494b696aec1a3bf55c9527ba8c192c01f70883a350'
-            '18b5dcf97507c285877141b65d87fe097d5a45b5ac08868fefef77bddff27cc1'
+sha256sums=('97e6200f6451faa15c4e327f110ed837c3262fbac5090b25e37be03d76ca908f'
+            'c997dc0904e9842a5d2dbb491af2ac55cec7bba2de984932888335aad10267d0'
             'fc896e5b00fad732d937bfb7b0db41922ecdb3a488bc1c1b91b201e028eed866'
             '986f8d802f37b72a54256f0ab84da83cb229388d58c0b6750f7c770818a18421'
             'df5843818f1571841e1a8bdbe38d7f853d841f38de46d6a6a5765de089495578'
@@ -82,7 +81,6 @@ sha256sums=('5915011b0014fc8d0256ae494b696aec1a3bf55c9527ba8c192c01f70883a350'
             '83b5684223309809393bdffc5122924cb9940403d682a887b0aa6524015df973'
             '5e804e1f241ce542f3f0e83d274ede6aa4b0539e510fb9376f8106e8732ce69b'
             '1d58ef2991c625f6f0eb33b4cb8303932f53f1c4694e42bae24c9cd36d2ad013'
-            '7f857cbcabf684a536aa2b9a3c96149309187e67132bb479e409d2bebf09819a'
             '2b11905b63b05b25807dd64757c779da74dd4c37e36d3f7a46485b1ee5a9d326'
             '94a8538251ad148f1025cc3de446ce64f73dc32b01815426fb159c722e8fa5bc'
             '1f18c5c10a3c63e41ecd05ad34cd9f6653ba96e9f1049ce2b7bb6da2578ae710'
