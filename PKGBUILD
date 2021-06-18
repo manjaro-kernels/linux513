@@ -15,17 +15,18 @@ _kernelname=-MANJARO
 _basekernel=5.13
 _basever=513
 _rc=rc6
-_commit='009c9aa5be652675a06d5211e1640e02bbb1c33d'
-_shortcommit=.${_rc}.d0613.g${_commit:0:7}
+_commit='fd0aa1a4567d0f09e1bfe367a950b004f99ac290'
+_shortcommit=.${_rc}.d0617.g${_commit:0:7}
 _pkgver=${_basekernel}${_shortcommit}
-pkgver=5.13.rc6.d0613.g009c9aa
+pkgver=5.13.rc6.d0617.gfd0aa1a
 pkgrel=1
 arch=('x86_64')
 url="http://www.kernel.org/"
 license=('GPL2')
 makedepends=('bc'
     'docbook-xsl'
-    'elfutils'
+    'libelf'
+    'pahole'
     'git'
     'inetutils'
     'kmod'
@@ -71,8 +72,8 @@ source=(#"https://www.kernel.org/pub/linux/kernel/v5.x/linux-${_basekernel}.tar.
         '0512-bootsplash.patch'
         '0513-bootsplash.gitpatch'
         )
-sha256sums=('2cbe19923c28ff20c8cf985349c87b00921b4c48dd70a17152cc8e8930a55658'
-            'c997dc0904e9842a5d2dbb491af2ac55cec7bba2de984932888335aad10267d0'
+sha256sums=('5ef8ef3a65329f592737532b723f67f8a8b1cc6468a047d25de2b51ed5cf1fe9'
+            '672e6e1d6b32051b65af7a22dde3d037b54b89ee02e300e96f975616cffe3016'
             'fc896e5b00fad732d937bfb7b0db41922ecdb3a488bc1c1b91b201e028eed866'
             '986f8d802f37b72a54256f0ab84da83cb229388d58c0b6750f7c770818a18421'
             'df5843818f1571841e1a8bdbe38d7f853d841f38de46d6a6a5765de089495578'
@@ -203,14 +204,11 @@ package_linux513() {
 
   # now we call depmod...
   depmod -b "${pkgdir}/usr" -F System.map "${_kernver}"
-
-  # add vmlinux
-  install -Dt "${pkgdir}/usr/lib/modules/${_kernver}/build" -m644 vmlinux
 }
 
 package_linux513-headers() {
   pkgdesc="Header files and scripts for building modules for ${pkgbase/linux/Linux} kernel"
-  depends=('gawk' 'python' 'libelf')
+  depends=('gawk' 'python' 'libelf' 'pahole')
   provides=("linux-headers=$pkgver")
 
   cd "${srcdir}/linux-${_basekernel}"
@@ -218,6 +216,7 @@ package_linux513-headers() {
 
   install -Dt "${_builddir}" -m644 Makefile .config Module.symvers
   install -Dt "${_builddir}/kernel" -m644 kernel/Makefile
+  install -Dt "${_builddir}" -m644 vmlinux  
 
   mkdir "${_builddir}/.tmp_versions"
 
@@ -256,21 +255,28 @@ package_linux513-headers() {
     rm -r "${_arch}"
   done
 
-  # remove files already in linux-docs package
+  # remove documentation files
   rm -r "${_builddir}/Documentation"
+
+  # strip scripts directory
+  local file
+  while read -rd '' file; do
+    case "$(file -bi "$file")" in
+      application/x-sharedlib\;*)      # Libraries (.so)
+        strip $STRIP_SHARED "$file" ;;
+      application/x-archive\;*)        # Libraries (.a)
+        strip $STRIP_STATIC "$file" ;;
+      application/x-executable\;*)     # Binaries
+        strip $STRIP_BINARIES "$file" ;;
+      application/x-pie-executable\;*) # Relocatable binaries
+        strip $STRIP_SHARED "$file" ;;
+    esac
+  done < <(find "${_builddir}" -type f -perm -u+x ! -name vmlinux -print0 2>/dev/null)
+  strip $STRIP_STATIC "${_builddir}/vmlinux"
+  
+  # remove unwanted files
+  find ${_builddir} -name '*.orig' -delete
 
   # Fix permissions
   chmod -R u=rwX,go=rX "${_builddir}"
-
-  # strip scripts directory
-  local _binary _strip
-  while read -rd '' _binary; do
-    case "$(file -bi "${_binary}")" in
-      *application/x-sharedlib*)  _strip="${STRIP_SHARED}"   ;; # Libraries (.so)
-      *application/x-archive*)    _strip="${STRIP_STATIC}"   ;; # Libraries (.a)
-      *application/x-executable*) _strip="${STRIP_BINARIES}" ;; # Binaries
-      *) continue ;;
-    esac
-    /usr/bin/strip ${_strip} "${_binary}"
-  done < <(find "${_builddir}/scripts" -type f -perm -u+w -print0 2>/dev/null)
 }
