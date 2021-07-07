@@ -14,8 +14,8 @@ pkgname=('linux513' 'linux513-headers')
 _kernelname=-MANJARO
 _basekernel=5.13
 _basever=513
-pkgver=5.13.0
-pkgrel=2
+pkgver=5.13.1
+pkgrel=1
 arch=('x86_64')
 url="https://www.kernel.org/"
 license=('GPL2')
@@ -32,9 +32,8 @@ makedepends=('bc'
     'tar'
     'xz')
 options=('!strip')
-source=(#"https://www.kernel.org/pub/linux/kernel/v5.x/linux-${_basekernel}.tar.xz"
-        "https://github.com/torvalds/linux/archive/v${_basekernel}.tar.gz"
-         #"https://www.kernel.org/pub/linux/kernel/v5.x/patch-${pkgver}.xz"
+source=("https://www.kernel.org/pub/linux/kernel/v5.x/linux-${_basekernel}.tar.xz"
+        "https://www.kernel.org/pub/linux/kernel/v5.x/patch-${pkgver}.xz"
         # the main kernel config files
         'config' 'config.anbox'
         # ARCH Patches
@@ -67,7 +66,8 @@ source=(#"https://www.kernel.org/pub/linux/kernel/v5.x/linux-${_basekernel}.tar.
         '0512-bootsplash.patch'
         '0513-bootsplash.gitpatch'
         )
-sha256sums=('9ce4c15b10d4dc9e353f3105dd11b9d2d2ef83e24772d68d3cf0830fe5f527a1'
+sha256sums=('3f6baa97f37518439f51df2e4f3d65a822ca5ff016aa8e60d2cc53b95a6c89d9'
+            'b356073468ffaee4e2ff507a521b70d130eab6542c8d9012168548f2cf554a79'
             'b3f398d3e034046de9e0fac5f2d614b84846c3f839a4a0f1099fe3fa4e526098'
             'fc896e5b00fad732d937bfb7b0db41922ecdb3a488bc1c1b91b201e028eed866'
             '986f8d802f37b72a54256f0ab84da83cb229388d58c0b6750f7c770818a18421'
@@ -99,8 +99,8 @@ prepare() {
   cd "${srcdir}/linux-${_basekernel}"
 
   # add upstream patch
-  #msg "add upstream patch"
-  #patch -p1 -i "${srcdir}/patch-${pkgver}"
+  msg "add upstream patch"
+  patch -p1 -i "${srcdir}/patch-${pkgver}"
 
   local src
   for src in "${source[@]}"; do
