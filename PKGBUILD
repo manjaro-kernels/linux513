@@ -15,7 +15,7 @@ _kernelname=-MANJARO
 _basekernel=5.13
 _basever=513
 pkgver=5.13.1
-pkgrel=2
+pkgrel=3
 arch=('x86_64')
 url="https://www.kernel.org/"
 license=('GPL2')
@@ -43,6 +43,7 @@ source=("https://www.kernel.org/pub/linux/kernel/v5.x/linux-${_basekernel}.tar.x
         # MANJARO Patches
         '0101-i2c-nuvoton-nc677x-hwmon-driver.patch'
         '0102-iomap-iomap_bmap-should-accept-unwritten-maps.patch'
+        '0103-futex.patch'
         '0104-revert-xhci-Add-support-for-Renesas-controller-with-memory.patch'
         '0107-quirk-kernel-org-bug-210681-firmware_rome_error.patch'
         # Lenovo + AMD
@@ -74,6 +75,7 @@ sha256sums=('3f6baa97f37518439f51df2e4f3d65a822ca5ff016aa8e60d2cc53b95a6c89d9'
             'df5843818f1571841e1a8bdbe38d7f853d841f38de46d6a6a5765de089495578'
             '7823d7488f42bc4ed7dfae6d1014dbde679d8b862c9a3697a39ba0dae5918978'
             '95745075edd597caa92b369cfbcd11a04c9e3c88c0c987c70114924e1e01df5c'
+            '1965a68b08f5379a581c83e8dbe42e7ff8ec5e79da02fcb755556280a8c76c65'
             '83b5684223309809393bdffc5122924cb9940403d682a887b0aa6524015df973'
             '5e804e1f241ce542f3f0e83d274ede6aa4b0539e510fb9376f8106e8732ce69b'
             '1d58ef2991c625f6f0eb33b4cb8303932f53f1c4694e42bae24c9cd36d2ad013'
