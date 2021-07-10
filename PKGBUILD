@@ -15,7 +15,7 @@ _kernelname=-MANJARO
 _basekernel=5.13
 _basever=513
 pkgver=5.13.1
-pkgrel=1
+pkgrel=2
 arch=('x86_64')
 url="https://www.kernel.org/"
 license=('GPL2')
@@ -68,7 +68,7 @@ source=("https://www.kernel.org/pub/linux/kernel/v5.x/linux-${_basekernel}.tar.x
         )
 sha256sums=('3f6baa97f37518439f51df2e4f3d65a822ca5ff016aa8e60d2cc53b95a6c89d9'
             'b356073468ffaee4e2ff507a521b70d130eab6542c8d9012168548f2cf554a79'
-            'b3f398d3e034046de9e0fac5f2d614b84846c3f839a4a0f1099fe3fa4e526098'
+            'fc0ec841a6ed1a58ef5b56838b558a8b5c52dbbe1853e877c40365a191528866'
             'fc896e5b00fad732d937bfb7b0db41922ecdb3a488bc1c1b91b201e028eed866'
             '986f8d802f37b72a54256f0ab84da83cb229388d58c0b6750f7c770818a18421'
             'df5843818f1571841e1a8bdbe38d7f853d841f38de46d6a6a5765de089495578'
