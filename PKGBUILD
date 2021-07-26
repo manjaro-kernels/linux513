@@ -14,7 +14,7 @@ pkgname=('linux513' 'linux513-headers')
 _kernelname=-MANJARO
 _basekernel=5.13
 _basever=513
-pkgver=5.13.4
+pkgver=5.13.5
 pkgrel=1
 arch=('x86_64')
 url="https://www.kernel.org/"
@@ -68,7 +68,7 @@ source=("https://www.kernel.org/pub/linux/kernel/v5.x/linux-${_basekernel}.tar.x
         '0513-bootsplash.gitpatch'
         )
 sha256sums=('3f6baa97f37518439f51df2e4f3d65a822ca5ff016aa8e60d2cc53b95a6c89d9'
-            '66c6822e23b5fe2e82c105cc5c267760921e1c5632aeb9e7e91a3853c527777b'
+            '113a47d893d324fdb9528b5c602eb7cba2439dcf271b7dcd522316d8af610b45'
             'dbfcfc4b179c6a1e61ee3d8d51ec64f98663e1ee1fd784f3391c5736598c2d12'
             'fc896e5b00fad732d937bfb7b0db41922ecdb3a488bc1c1b91b201e028eed866'
             '986f8d802f37b72a54256f0ab84da83cb229388d58c0b6750f7c770818a18421'
