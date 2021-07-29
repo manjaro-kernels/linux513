@@ -1,5 +1,4 @@
 # Maintainer: Philip Müller <philm[at]manjaro[dot]org>
-# Maintainer: Bernhard Landauer <bernhard[at]manjaro[dot]org>
 # Maintainer: Helmut Stult <helmut[at]manjaro[dot]org>
 
 # Arch credits:
@@ -14,7 +13,7 @@ pkgname=('linux513' 'linux513-headers')
 _kernelname=-MANJARO
 _basekernel=5.13
 _basever=513
-pkgver=5.13.5
+pkgver=5.13.6
 pkgrel=1
 arch=('x86_64')
 url="https://www.kernel.org/"
@@ -44,7 +43,6 @@ source=("https://www.kernel.org/pub/linux/kernel/v5.x/linux-${_basekernel}.tar.x
         '0101-i2c-nuvoton-nc677x-hwmon-driver.patch'
         '0102-iomap-iomap_bmap-should-accept-unwritten-maps.patch'
         '0103-futex.patch'
-        '0104-revert-xhci-Add-support-for-Renesas-controller-with-memory.patch'
         '0107-quirk-kernel-org-bug-210681-firmware_rome_error.patch'
         # Lenovo + AMD
         '0302-lenovo-wmi2.patch'
@@ -68,7 +66,7 @@ source=("https://www.kernel.org/pub/linux/kernel/v5.x/linux-${_basekernel}.tar.x
         '0513-bootsplash.gitpatch'
         )
 sha256sums=('3f6baa97f37518439f51df2e4f3d65a822ca5ff016aa8e60d2cc53b95a6c89d9'
-            '113a47d893d324fdb9528b5c602eb7cba2439dcf271b7dcd522316d8af610b45'
+            'e83b798bfe22bc9d5e8115cd2bbff24cdf5fd0de1b423a3342985445b02668a8'
             'dbfcfc4b179c6a1e61ee3d8d51ec64f98663e1ee1fd784f3391c5736598c2d12'
             'fc896e5b00fad732d937bfb7b0db41922ecdb3a488bc1c1b91b201e028eed866'
             '986f8d802f37b72a54256f0ab84da83cb229388d58c0b6750f7c770818a18421'
@@ -76,7 +74,6 @@ sha256sums=('3f6baa97f37518439f51df2e4f3d65a822ca5ff016aa8e60d2cc53b95a6c89d9'
             '7823d7488f42bc4ed7dfae6d1014dbde679d8b862c9a3697a39ba0dae5918978'
             '95745075edd597caa92b369cfbcd11a04c9e3c88c0c987c70114924e1e01df5c'
             '1965a68b08f5379a581c83e8dbe42e7ff8ec5e79da02fcb755556280a8c76c65'
-            '83b5684223309809393bdffc5122924cb9940403d682a887b0aa6524015df973'
             '5e804e1f241ce542f3f0e83d274ede6aa4b0539e510fb9376f8106e8732ce69b'
             '1d58ef2991c625f6f0eb33b4cb8303932f53f1c4694e42bae24c9cd36d2ad013'
             '2b11905b63b05b25807dd64757c779da74dd4c37e36d3f7a46485b1ee5a9d326'
@@ -96,13 +93,12 @@ sha256sums=('3f6baa97f37518439f51df2e4f3d65a822ca5ff016aa8e60d2cc53b95a6c89d9'
             '60e295601e4fb33d9bf65f198c54c7eb07c0d1e91e2ad1e0dd6cd6e142cb266d'
             '035ea4b2a7621054f4560471f45336b981538a40172d8f17285910d4e0e0b3ef')
 
-
 prepare() {
-  cd "${srcdir}/linux-${_basekernel}"
+  cd "linux-${_basekernel}"
 
   # add upstream patch
   msg "add upstream patch"
-  patch -p1 -i "${srcdir}/patch-${pkgver}"
+  patch -p1 -i "../patch-${pkgver}"
 
   local src
   for src in "${source[@]}"; do
@@ -114,11 +110,11 @@ prepare() {
   done
 
   msg2 "0513-bootsplash"
-  git apply -p1 < "${srcdir}/0513-bootsplash.gitpatch"  
+  git apply -p1 < "../0513-bootsplash.gitpatch"
 
   msg2 "add config.anbox to config"
-  cat "${srcdir}/config" > ./.config
-  cat "${srcdir}/config.anbox" >> ./.config
+  cat "../config" > ./.config
+  cat "../config.anbox" >> ./.config
 
   if [ "${_kernelname}" != "" ]; then
     sed -i "s|CONFIG_LOCALVERSION=.*|CONFIG_LOCALVERSION=\"${_kernelname}\"|g" ./.config
@@ -135,20 +131,12 @@ prepare() {
   msg "get kernel version"
   make prepare
 
-  # load configuration
-  # Configure the kernel. Replace the line below with one of your choice.
-  #make menuconfig # CLI menu for configuration
-  #make nconfig # new CLI menu for configuration
-  #make xconfig # X-based configuration
-  #make oldconfig # using old config from previous kernel version
-  # ... or manually edit .config
-
   msg "rewrite configuration"
   yes "" | make config >/dev/null
 }
 
 build() {
-  cd "${srcdir}/linux-${_basekernel}"
+  cd "linux-${_basekernel}"
 
   msg "build"
   make ${MAKEFLAGS} LOCALVERSION= bzImage modules
@@ -160,9 +148,7 @@ package_linux513() {
   optdepends=('crda: to set the correct wireless channels of your country')
   provides=("linux=${pkgver}" VIRTUALBOX-GUEST-MODULES WIREGUARD-MODULE)
 
-  cd "${srcdir}/linux-${_basekernel}"
-
-  KARCH=x86
+  cd "linux-${_basekernel}"
 
   # get kernel version
   _kernver="$(make LOCALVERSION= kernelrelease)"
@@ -172,7 +158,7 @@ package_linux513() {
 
   # systemd expects to find the kernel here to allow hibernation
   # https://github.com/systemd/systemd/commit/edda44605f06a41fb86b7ab8128dcf99161d2344
-  cp arch/$KARCH/boot/bzImage "${pkgdir}/usr/lib/modules/${_kernver}/vmlinuz"
+  cp arch/x86/boot/bzImage "${pkgdir}/usr/lib/modules/${_kernver}/vmlinuz"
 
   # Used by mkinitcpio to name the kernel
   echo "${pkgbase}" | install -Dm644 /dev/stdin "${pkgdir}/usr/lib/modules/${_kernver}/pkgbase"
@@ -201,7 +187,7 @@ package_linux513-headers() {
   depends=('gawk' 'python' 'libelf' 'pahole')
   provides=("linux-headers=$pkgver")
 
-  cd "${srcdir}/linux-${_basekernel}"
+  cd "linux-${_basekernel}"
   local _builddir="${pkgdir}/usr/lib/modules/${_kernver}/build"
 
   install -Dt "${_builddir}" -m644 Makefile .config Module.symvers
@@ -212,11 +198,10 @@ package_linux513-headers() {
 
   cp -t "${_builddir}" -a include scripts
 
-  install -Dt "${_builddir}/arch/${KARCH}" -m644 "arch/${KARCH}/Makefile"
-  install -Dt "${_builddir}/arch/${KARCH}/kernel" -m644 "arch/${KARCH}/kernel/asm-offsets.s"
-  #install -Dt "${_builddir}/arch/${KARCH}/kernel" -m644 "arch/${KARCH}/kernel/macros.s"
+  install -Dt "${_builddir}/arch/x86" -m644 "arch/x86/Makefile"
+  install -Dt "${_builddir}/arch/x86/kernel" -m644 "arch/x86/kernel/asm-offsets.s"
 
-  cp -t "${_builddir}/arch/${KARCH}" -a "arch/${KARCH}/include"
+  cp -t "${_builddir}/arch/x86" -a "arch/x86/include"
 
   install -Dt "${_builddir}/drivers/md" -m644 drivers/md/*.h
   install -Dt "${_builddir}/net/mac80211" -m644 net/mac80211/*.h
