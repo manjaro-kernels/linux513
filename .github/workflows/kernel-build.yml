@@ -1,0 +1,109 @@
+name: kernel_build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build_kernel:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install \
+            gdisk \
+            zip \
+            systemd-container \
+            bmap-tools \
+            asciidoc \
+            libarchive-tools \
+            git \
+            build-essential \
+            cmake \
+            libarchive-dev \
+            pkg-config \
+            libcurl4-openssl-dev \
+            libgpgme-dev \
+            libssl-dev \
+            fakeroot \
+            dh-autoreconf \
+            haveged \
+            os-prober \
+            kwalify \
+            dosfstools \
+            libisoburn1 \
+            squashfs-tools \
+            docbook2x \
+            mktorrent \
+            doxygen \
+            python3-pip
+          sudo pip3 install meson
+          sudo pip3 install ninja
+      - name: install pacman
+        env:
+          PACMAN_VERSION: 6.0.0
+        run: |
+          sudo git clone --depth 1 https://gitlab.manjaro.org/packages/core/pacman.git
+          pushd pacman
+          sudo wget https://sources.archlinux.org/other/pacman/pacman-${PACMAN_VERSION}.tar.xz
+          sudo tar -xvf pacman-${PACMAN_VERSION}.tar.xz
+          pushd pacman-${PACMAN_VERSION}
+            sudo patch -p1 -i ../pacman-sync-first-option.patch
+            sudo meson --prefix=/usr \
+                      --buildtype=plain \
+                      -Ddoc=disabled \
+                      -Ddoxygen=enabled \
+                      -Dscriptlet-shell=/usr/bin/bash \
+                      -Dldconfig=/usr/bin/ldconfig \
+                      build
+            sudo meson compile -C build
+            sudo meson install -C build
+          popd
+          sudo install -m644 pacman.conf /etc/pacman.conf
+          sudo install -m644 makepkg.conf /etc/
+          sudo mkdir -p /etc/pacman.d
+          sudo touch /etc/pacman.d/mirrorlist
+          popd
+      - name: install keyrings
+        run: |
+          sudo git clone --depth 1 https://gitlab.manjaro.org/packages/core/manjaro-keyring.git
+          pushd manjaro-keyring
+          sudo install -dm755 /usr/share/pacman/keyrings/
+          sudo install -m0644 manjaro.gpg /usr/share/pacman/keyrings/
+          sudo install -m0644 manjaro-trusted /usr/share/pacman/keyrings/
+          sudo install -m0644 manjaro-trusted /usr/share/pacman/keyrings/
+          popd
+        
+          sudo git clone --depth 1 https://gitlab.archlinux.org/archlinux/archlinux-keyring.git
+          pushd archlinux-keyring
+          sudo install -m0644 archlinux.gpg /usr/share/pacman/keyrings/
+          sudo install -m0644 archlinux-trusted /usr/share/pacman/keyrings/
+          sudo install -m0644 archlinux-revoked /usr/share/pacman/keyrings/
+          popd
+          sudo pacman-key --init
+          sudo pacman-key --populate archlinux manjaro
+      - name: install manjaro-chrootbuild
+        run: |
+          sudo git clone --depth 1 https://gitlab.manjaro.org/tools/development-tools/manjaro-chrootbuild
+          pushd manjaro-chrootbuild
+          sudo ./install.sh "PACKAGER = <Manjaro Build Servere> <build@manjaro.org>"
+          popd
+      - id: vars
+        run: |
+          KERNEL="$(echo ${GITHUB_REPOSITORY} | cut -d'/' -f2)"
+      - name: clone repo
+        run: |
+          sudo git clone https://github.com/manjaro-kernels/${{ steps.vars.KERNEL }}.git
+      - name: build kernel
+        run: |
+          sudo chrootbuild -np ${{ steps.vars.KERNEL }}
+      - name: publish kernel
+        shell: bash -O extglob {0}
+        run: |
+          _ver=$(grep ^pkgver= ${{ steps.vars.KERNEL }}/PKGBUILD | cut -d'=' -f2)
+          _rel=$(grep ^pkgrel= ${{ steps.vars.KERNEL }}/PKGBUILD | cut -d'=' -f2)
+          _tag=${_ver}-${_rel}
+          echo ${{ github.token }} | gh auth login --with-token
+          gh release create ${_tag} --title ${_tag} --repo ${{ github.repository }} --notes "automated release" || echo "release already exists"
+          GITHUB_LINK=https://github.com/${GITHUB_REPOSITORY}/releases/download/${_tag}
+          gh release upload ${_tag} --repo ${{ github.repository }} --clobber ./*.pkg.tar.*
