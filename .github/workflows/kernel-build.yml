@@ -6,6 +6,8 @@ on:
 jobs:
   build_kernel:
     runs-on: ubuntu-20.04
+    env:
+      KERNEL="$(echo ${GITHUB_REPOSITORY} | cut -d'/' -f2)"
     steps:
       - name: install dependencies
         run: |
@@ -88,20 +90,17 @@ jobs:
           pushd manjaro-chrootbuild
           sudo ./install.sh "PACKAGER = <Manjaro Build Servere> <build@manjaro.org>"
           popd
-      - id: vars
-        run: |
-          KERNEL="$(echo ${GITHUB_REPOSITORY} | cut -d'/' -f2)"
       - name: clone repo
         run: |
-          sudo git clone https://github.com/manjaro-kernels/${{ steps.vars.KERNEL }}.git
+          sudo git clone https://github.com/manjaro-kernels/${{ jobs.build_kernel.env.KERNEL }}.git
       - name: build kernel
         run: |
-          sudo chrootbuild -np ${{ steps.vars.KERNEL }}
+          sudo chrootbuild -np ${{ jobs.build_kernel.env.KERNEL }}
       - name: publish kernel
         shell: bash -O extglob {0}
         run: |
-          _ver=$(grep ^pkgver= ${{ steps.vars.KERNEL }}/PKGBUILD | cut -d'=' -f2)
-          _rel=$(grep ^pkgrel= ${{ steps.vars.KERNEL }}/PKGBUILD | cut -d'=' -f2)
+          _ver=$(grep ^pkgver= ${{ jobs.build_kernel.env.KERNEL }}/PKGBUILD | cut -d'=' -f2)
+          _rel=$(grep ^pkgrel= ${{ jobs.build_kernel.env.KERNEL }}/PKGBUILD | cut -d'=' -f2)
           _tag=${_ver}-${_rel}
           echo ${{ github.token }} | gh auth login --with-token
           gh release create ${_tag} --title ${_tag} --repo ${{ github.repository }} --notes "automated release" || echo "release already exists"
