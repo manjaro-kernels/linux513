@@ -91,7 +91,7 @@ jobs:
       - name: clone repo
         run: |
           KERNEL=$(echo ${GITHUB_REPOSITORY} | cut -d'/' -f2)
-          sudo git clone https://github.com/manjaro-kernels/${KERNEL}.git
+          sudo git clone https://gitlab.manjaro.org/packages/core/${KERNEL}.git
           echo "KERNEL=${KERNEL}" >>$GITHUB_ENV
       - name: build kernel
         run: |
