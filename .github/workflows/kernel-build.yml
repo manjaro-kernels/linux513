@@ -90,8 +90,9 @@ jobs:
           popd
       - name: clone repo
         run: |
-          echo "KERNEL=$(echo ${GITHUB_REPOSITORY} | cut -d'/' -f2)" >>$GITHUB_ENV
-          sudo git clone https://github.com/manjaro-kernels/${{ env.KERNEL }}.git
+          KERNEL=$(echo ${GITHUB_REPOSITORY} | cut -d'/' -f2)
+          sudo git clone https://github.com/manjaro-kernels/${KERNEL}.git
+          echo "KERNEL=${KERNEL}" >>$GITHUB_ENV
       - name: build kernel
         run: |
           sudo chrootbuild -np ${{ env.KERNEL }}
