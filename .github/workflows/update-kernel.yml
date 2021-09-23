@@ -7,7 +7,9 @@ jobs:
   build-kernel:
     runs-on: ubuntu-20.04
     steps:
-      - uses: manjaro-kernels/kernel-action@master
+      - uses: manjaro-kernels/kernel-action@sign_pkgs
         with:
           gitlab-pw: ${{ secrets.gitlab_server_user }}
-          bump-kernel: true
+          bump-kernel: false
+          gpg-key: ${{ secrets.gpg_key }}
+          gpg-passphrase: ${{ secrets.gpg_passphrase }}
