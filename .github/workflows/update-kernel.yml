@@ -1,4 +1,4 @@
-name: update_kernel
+name: Update Kernel
 
 on:
   workflow_dispatch:
@@ -7,9 +7,15 @@ jobs:
   build-kernel:
     runs-on: ubuntu-20.04
     steps:
-      - uses: manjaro-kernels/kernel-action@sign_pkgs
+      - uses: manjaro-kernels/kernel-action@master
         with:
           gitlab-pw: ${{ secrets.gitlab_server_user }}
-          bump-kernel: false
-          gpg-key: ${{ secrets.gpg_key }}
-          gpg-passphrase: ${{ secrets.gpg_passphrase }}
+          build-mirror: ${{ secrets.BUILD_MIRROR }}
+          branch: unstable
+          bump-kernel: true
+          bump-modules: true
+          gpg-key: ${{ secrets.GPG_KEY }}
+          gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          boxit-host: ${{ secrets.BOXIT_HOST }}
+          boxit-target: ${{ secrets.BOXIT_TARGET }}
+          ssh-key: ${{ secrets.SSH_PACKAGE_CI }}
